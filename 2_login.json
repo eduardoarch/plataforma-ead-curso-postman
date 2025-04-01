@@ -1,0 +1,215 @@
+{
+	"info": {
+		"_postman_id": "f84e554f-0cfb-4251-a482-3ce04e3ab70a",
+		"name": "2_login",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42995150",
+		"_collection_link": "https://treinamento-postman.postman.co/workspace/Treinamento-Postman---Avan%C3%A7ado~991782e6-78c0-4c5d-b861-0fc548dd0d4c/collection/42995150-f84e554f-0cfb-4251-a482-3ce04e3ab70a?action=share&source=collection_link&creator=42995150"
+	},
+	"item": [
+		{
+			"name": "Login sucess",
+			"item": [
+				{
+					"name": "signup - success",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function firstName() {",
+									"  let firstName = [\"José\", \"João\", \"Maria\", \"Mariana\", \"Antonio\", \"Gleide\", \"Joel\", \"Mabel\", \"Rosangela\", \"Manuel\"]",
+									"  let randomItem = firstName[Math.floor(Math.random() * firstName.length)]",
+									"  return randomItem",
+									"}",
+									"pm.environment.set(\"FirstName\", firstName())",
+									"",
+									"function lastName() {",
+									"  let lastName = [\"Alves Neto\", \"Gumtemberg\", \"Silva Souza\", \"Pereira\", \"Ferreira dos Santos\", \"Farias das Neves\", \"Rosa\"]",
+									"  let randomItem = lastName[Math.floor(Math.random() * lastName.length)]",
+									"  return randomItem",
+									"}",
+									"pm.environment.set(\"LastName\", lastName())",
+									"",
+									"function accessProfile() {",
+									"  let accessProfile = [\"ADMIN\", \"FINANCEIRO\", \"ADMINISTRATIVO\", \"TI\", \"CONTROLADORIA\"]",
+									"  let randomItem = accessProfile[Math.floor(Math.random() * accessProfile.length)]",
+									"  return randomItem",
+									"}",
+									"pm.environment.set(\"AccessProfile\", accessProfile())",
+									"",
+									"function provideMail() {",
+									"  let provideMail = [\"@gmail.com\", \"@yahoo.com\", \"@bol.com.br\", \"@outlook.com\", \"@lenovo.com\"]",
+									"  let randomItem = provideMail[Math.floor(Math.random() * provideMail.length)]",
+									"  return randomItem",
+									"}",
+									"pm.environment.set(\"ProvideMail\", provideMail())",
+									"",
+									"",
+									"pm.environment.get(\"FirstName\")",
+									"pm.environment.get(\"LastName\")",
+									"pm.environment.set(\"FullName\", pm.environment.get(\"FirstName\") + \" \" + pm.environment.get(\"LastName\"))",
+									"pm.environment.set(\"Mail\", pm.environment.get(\"FirstName\") + \"_\" + pm.variables.replaceIn('{{$guid}}') + pm.environment.get(\"ProvideMail\"))",
+									"",
+									"// pm.environment.set(\"Email\", pm.variables.replaceIn('{{$randomEmail}}'))"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// console.log(\"Passei depois da requisisão!!\")",
+									"",
+									"pm.test(\"Check is token exist\", function () {",
+									"  // console.log(JSON.parse(responseBody).token)",
+									"  let token = JSON.parse(responseBody).token",
+									"  // token = null",
+									"  pm.expect(token).to.exist",
+									"})",
+									"",
+									"pm.test(\"Check is fullName true\", function () {",
+									"  pm.expect(pm.environment.get(\"FullName\")).to.eql(JSON.parse(responseBody).user.fullName)",
+									"})",
+									"",
+									"pm.test(\"Check is email true\", function () {",
+									"  pm.expect(pm.environment.get(\"Mail\")).to.eql(JSON.parse(responseBody).user.mail)",
+									"})",
+									"",
+									"pm.test(\"Check is accessProfile true\", function () {",
+									"  pm.expect(pm.environment.get(\"AccessProfile\")).to.eql(JSON.parse(responseBody).user.accessProfile)",
+									"})",
+									"",
+									"pm.test(\"Check is status true\", function () {",
+									"  pm.expect(true).to.eql(JSON.parse(responseBody).user.status)",
+									"",
+									"  // let status = JSON.parse(responseBody).user.status",
+									"  // status = false",
+									"  // pm.expect(true).to.eql(status)",
+									"})",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"{{FullName}}\",\n  \"mail\": \"{{Mail}}\",\n  \"password\": \"{{password}}\",\n  \"confirmPassword\": \"{{password}}\",\n  \"accessProfile\": \"{{AccessProfile}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}signup",
+							"host": [
+								"{{url}}signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login - success",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// console.log(\"Passei depois da requisisão!!\")",
+									"",
+									"pm.test(\"Check is token exist\", function () {",
+									"  // console.log(JSON.parse(responseBody).token)",
+									"  let token = JSON.parse(responseBody).token",
+									"  // token = null",
+									"  pm.expect(token).to.exist",
+									"})",
+									"",
+									"pm.test(\"Check is fullName true\", function () {",
+									"  pm.expect(pm.environment.get(\"FullName\")).to.eql(JSON.parse(responseBody).user.fullName)",
+									"})",
+									"",
+									"pm.test(\"Check is email true\", function () {",
+									"  pm.expect(pm.environment.get(\"Mail\")).to.eql(JSON.parse(responseBody).user.mail)",
+									"})",
+									"",
+									"pm.test(\"Check is accessProfile true\", function () {",
+									"  pm.expect(pm.environment.get(\"AccessProfile\")).to.eql(JSON.parse(responseBody).user.accessProfile)",
+									"})",
+									"",
+									"pm.test(\"Check is status true\", function () {",
+									"  pm.expect(true).to.eql(JSON.parse(responseBody).user.status)",
+									"",
+									"  // let status = JSON.parse(responseBody).user.status",
+									"  // status = false",
+									"  // pm.expect(true).to.eql(status)",
+									"})",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"mail\": \"{{Mail}}\",\n  \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
